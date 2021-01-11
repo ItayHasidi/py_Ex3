@@ -16,24 +16,30 @@ class GraphInterface:
         raise NotImplementedError
 
     def get_all_v(self) -> dict:
-        """return a dictionary of all the nodes in the Graph, each node is represented using a pair
+        """return a dictionary of all the nodes in the Graph,
+        each node is represented using a pair
          (node_id, node_data)
         """
 
     def all_in_edges_of_node(self, id1: int) -> dict:
-        """return a dictionary of all the nodes connected to (into) node_id ,
-        each node is represented using a pair (other_node_id, weight)
+        """return a dictionary of all the nodes connected
+        to (into) node_id ,
+        each node is represented using a pair
+        (other_node_id, weight)
          """
 
     def all_out_edges_of_node(self, id1: int) -> dict:
-        """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
+        """return a dictionary of all the nodes
+        connected from node_id , each node is represented using
+        a pair
         (other_node_id, weight)
         """
 
     def get_mc(self) -> int:
         """
         Returns the current version of this graph,
-        on every change in the graph state - the MC should be increased
+        on every change in the graph state - the MC
+        should be increased
         @return: The current version of this graph.
         """
         raise NotImplementedError
@@ -44,9 +50,11 @@ class GraphInterface:
         @param id1: The start node of the edge
         @param id2: The end node of the edge
         @param weight: The weight of the edge
-        @return: True if the edge was added successfully, False o.w.
+        @return: True if the edge was added successfully,
+        False o.w.
 
-        Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
+        Note: If the edge already exists or one of the nodes
+        dose not exists the functions will do nothing
         """
         raise NotImplementedError
 
@@ -55,7 +63,8 @@ class GraphInterface:
         Adds a node to the graph.
         @param node_id: The node ID
         @param pos: The position of the node
-        @return: True if the node was added successfully, False o.w.
+        @return: True if the node was added successfully,
+        False o.w.
 
         Note: if the node id already exists the node will not be added
         """

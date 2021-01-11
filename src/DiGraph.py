@@ -1,5 +1,6 @@
 from GraphInterface import GraphInterface
 from abc import ABC
+import json
 
 
 class DiGraph(GraphInterface):
@@ -36,28 +37,23 @@ class DiGraph(GraphInterface):
         if id1 is not id2:
             if id1 in self.nodeMap:
                 if id2 in self.nodeMap:
-                    if id2 not in self.edgeMap(id1):#.__contains__(id2):
-                        self.edgeMap[id1][id2] = weight
-                        self.edgeMapRev[id2][id1] = weight
-                        # self.edgeMap[id1] = {id2: weight}
-                        # self.edgeMapRev[id2] = {id1: weight}
-                        # self.edgeMap[id1], [id2] = e
-                        # self.edgeMapRev[id2], [id1] = e
-                        self.countMC += 1
-                        self.countE += 1
-                        return True
+                    if not self.edgeMap.get(id1).__contains__(id2):
+                        if weight >= 0:
+                            self.edgeMap[id1][id2] = weight
+                            self.edgeMapRev[id2][id1] = weight
+                            # self.edgeMap[id1] = {id2: weight}
+                            # self.edgeMapRev[id2] = {id1: weight}
+                            # self.edgeMap[id1], [id2] = e
+                            # self.edgeMapRev[id2], [id1] = e
+                            self.countMC += 1
+                            self.countE += 1
+                            return True
         return False
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
-        # if pos is not None:
-        #     p = Point(pos[0], pos[1], pos[2])
-        # else:
-        #     p = Point(0, 0, 0)
-        # n = Node(node_id, p)
         if node_id not in self.nodeMap:
             self.countMC += 1
             self.countV += 1
-            # self.nodeMap.__setitem__(node_id, pos)
             self.nodeMap[node_id] = pos
             self.edgeMap[node_id] = {}
             self.edgeMapRev[node_id] = {}
@@ -89,3 +85,30 @@ class DiGraph(GraphInterface):
             self.countE -= 1
             return True
         return False
+
+    def __repr__(self):
+        #
+        # data = dict()
+        # data['Edges'] = []
+        # data['Nodes'] = []
+        # for i in self.get_all_v():
+        #     for j in self.all_out_edges_of_node(i):
+        #         temp = self.all_out_edges_of_node().get(j)
+        #         t: dict = {'src': i, 'w': temp[0], 'dest': temp[1]}
+        #         data['Edges'].append(t)
+        #     temp2 = self.get_all_v()
+        #     t2: dict = {'pos': temp2, 'id': i}
+        #     data['Nodes'].append(t2)
+        # # json.dump(data, out)
+
+        # data = self.nodeMap
+        res = ""
+        for i in self.nodeMap:
+            tempNode = self.nodeMap.get(i)
+            res += ("Node - id: " + str(i) + ", pos: " + str(tempNode) + "\n")
+        for i in self.edgeMap:
+            tempEdge: dict = self.edgeMap.get(i)
+            for j in tempEdge:
+                tempEdge2 = tempEdge.get(j)
+                res += ("Edge - src: " + str(i) + ", dest: " + str(j) + ", weight: " + str(tempEdge2) + "\n")
+        return res

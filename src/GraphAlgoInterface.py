@@ -29,10 +29,12 @@ class GraphAlgoInterface:
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         """
-        Returns the shortest path from node id1 to node id2 using Dijkstra's Algorithm
+        Returns the shortest path from node id1 to node id2 using
+        Dijkstra's Algorithm
         @param id1: The start node id
         @param id2: The end node id
-        @return: The distance of the path, a list of the nodes ids that the path goes through
+        @return: The distance of the path, a list of the nodes
+        ids that the path goes through
 
         Example:
 #      >>> from GraphAlgo import GraphAlgo
@@ -48,7 +50,8 @@ class GraphAlgoInterface:
 #        (5, [0, 1, 2])
 
         Notes:
-        If there is no path between id1 and id2, or one of them dose not exist the function returns (float('inf'),[])
+        If there is no path between id1 and id2, or one of them
+        dose not exist the function returns (float('inf'),[])
         More info:
         https://en.wikipedia.org/wiki/Dijkstra's_algorithm
         """
@@ -56,30 +59,36 @@ class GraphAlgoInterface:
 
     def connected_component(self, id1: int) -> list:
         """
-        Finds the Strongly Connected Component(SCC) that node id1 is a part of.
+        Finds the Strongly Connected Component(SCC) that node
+        id1 is a part of.
         @param id1: The node id
         @return: The list of nodes in the SCC
 
         Notes:
-        If the graph is None or id1 is not in the graph, the function should return an empty list []
+        If the graph is None or id1 is not in the graph,
+        the function should return an empty list []
         """
         raise NotImplementedError
 
     def connected_components(self) -> List[list]:
         """
-        Finds all the Strongly Connected Component(SCC) in the graph.
+        Finds all the Strongly Connected Component(SCC) in
+        the graph.
         @return: The list all SCC
 
         Notes:
-        If the graph is None the function should return an empty list []
+        If the graph is None the function should return
+        an empty list []
         """
         raise NotImplementedError
 
     def plot_graph(self) -> None:
         """
         Plots the graph.
-        If the nodes have a position, the nodes will be placed there.
-        Otherwise, they will be placed in a random but elegant manner.
+        If the nodes have a position, the nodes will be placed
+        there.
+        Otherwise, they will be placed in a random but elegant
+        manner.
         @return: None
         """
         raise NotImplementedError
