@@ -4,8 +4,8 @@ from GraphAlgoInterface import GraphAlgoInterface
 from DiGraph import DiGraph
 from abc import ABC
 import json
-import matplotlib.pyplot as plt
-
+import matplotlib.axis as plt
+import random as ran
 from src import GraphInterface
 
 
@@ -32,11 +32,18 @@ class GraphAlgo(GraphAlgoInterface, ABC):
             data = json.load(jFile)
             # print(data['Nodes'])
             for i in data['Nodes']:
-                x: dict = i
-                # print(x.get('id'))
-                t: int = x.get('id')
-                # print(type(t))
-                self.graph.add_node(t)
+                # print(len(i))
+                if len(i) == 1:
+                    x: dict = i
+                    # print(x.get('id'))
+                    t: int = x.get('id')
+                    # print(type(t))
+                    self.graph.add_node(t)
+                else:
+                    # print(i['pos'])
+                    p = str.split(i['pos'],',')
+                    t: int = i['id']
+                    self.graph.add_node(t,p)
 
             for i in data['Edges']:
                 src = i['src']
@@ -124,8 +131,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                         return i
         return []
 
-
-    def connected_rek_out(self, id1 : int ) :
+    def connected_rek_out(self, id1: int):
         self.countVisit += 1
         for i in self.graph.all_out_edges_of_node(id1):
             if self.tags.get(i) == -1:
@@ -155,7 +161,7 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         self.setTag(-1)
         # print(self.stack)
         while len(self.stack) != 0:
-            temp = self.stack.pop(len(self.stack)-1)
+            temp = self.stack.pop(len(self.stack) - 1)
             if self.tags.get(temp) == -1:
                 l = []
                 self.connected_rek_in(temp, l)
@@ -163,7 +169,30 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         self.compList = endList
         return endList
 
-
-
     def plot_graph(self) -> None:
-        pass
+        z = self.graph.v_size() * self.graph.v_size()
+        # plt.axis([0,1000000,0,10000000])
+        for i in self.graph.get_all_v():
+            if self.graph.nodeMap.get(i) is None:
+                    x = ran.randint(0, z)
+                    # print(x)
+                    plt.plot([(i*(i-1))/2],[i],'ro')
+
+            else:
+                p = self.graph.nodeMap.get(i)
+                x = p[0]
+                y = p[1]
+                # print(x,y)
+                plt.plot([x],[y],'ro')
+        plt.show()
+
+    def plot_Edge (self,x: float, y: float ,id1: int):
+        for i in self.graph.all_out_edges_of_node(id1):
+            w = self.graph.edgeMap.get(i)[id1]
+            p_src = self.graph.nodeMap.get(id1)
+            x_src= p_src[0]
+            y_src = p_src[1]
+            p_d = self.graph.nodeMap.get(i)
+            x_d = p_d[0]
+            y_d= p_d[1]
+            plt.arrow(x_src,y_src,x_d - x_src ,y_src - y_d)
