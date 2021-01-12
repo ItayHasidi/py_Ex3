@@ -4,7 +4,8 @@ from GraphAlgoInterface import GraphAlgoInterface
 from DiGraph import DiGraph
 from abc import ABC
 import json
-import matplotlib.axis as plt
+import matplotlib.pyplot as plt
+
 import random as ran
 from src import GraphInterface
 
@@ -41,9 +42,9 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                     self.graph.add_node(t)
                 else:
                     # print(i['pos'])
-                    p = str.split(i['pos'],',')
+                    p = str.split(i['pos'], ',')
                     t: int = i['id']
-                    self.graph.add_node(t,p)
+                    self.graph.add_node(t, p)
 
             for i in data['Edges']:
                 src = i['src']
@@ -68,8 +69,13 @@ class GraphAlgo(GraphAlgoInterface, ABC):
                 t['w'] = temp
 
                 data['Edges'].append(t)
-            temp2 = self.graph.get_all_v()
-            t2: dict = {'pos': temp2, 'id': i}
+
+            temp2 = self.graph.nodeMap.get(i)
+            if temp2 is None:
+                t2: dict = {'id': i}
+            else:
+                str = temp2[0]+','+temp2[1]+','+temp2[2]
+                t2: dict = {'pos': str, 'id': i}
             data['Nodes'].append(t2)
         with open(file_name, 'w') as out:
             json.dump(data, out)
@@ -174,25 +180,49 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         # plt.axis([0,1000000,0,10000000])
         for i in self.graph.get_all_v():
             if self.graph.nodeMap.get(i) is None:
-                    x = ran.randint(0, z)
-                    # print(x)
-                    plt.plot([(i*(i-1))/2],[i],'ro')
+                x = (i * (i - 1)) / 2
+                y = i
+                plt.plot([x], [y], 'o')
+                plt.annotate(str(i), xy=(float(x), float(y)))
+                self.plot_Edge(i, 1)
 
             else:
                 p = self.graph.nodeMap.get(i)
                 x = p[0]
                 y = p[1]
                 # print(x,y)
-                plt.plot([x],[y],'ro')
+                plt.plot([float(x)], [float(y)], 'o')
+                plt.rcParams.update({'font.size': 18})
+                plt.annotate(str(i), xy=(float(x), float(y)))
+                self.plot_Edge(i, 0)
+        # if self.graph.nodeMap.get(i) is None:
+        #     for i in self.graph.get_all_v():
+
         plt.show()
 
-    def plot_Edge (self,x: float, y: float ,id1: int):
+    def plot_Edge(self, id1: int, flag: int):
+        p_s = dict()
+        x_s = float()
+        y_s = float()
+        p_d = dict()
+        x_d = float()
+        y_d = float()
         for i in self.graph.all_out_edges_of_node(id1):
-            w = self.graph.edgeMap.get(i)[id1]
-            p_src = self.graph.nodeMap.get(id1)
-            x_src= p_src[0]
-            y_src = p_src[1]
-            p_d = self.graph.nodeMap.get(i)
-            x_d = p_d[0]
-            y_d= p_d[1]
-            plt.arrow(x_src,y_src,x_d - x_src ,y_src - y_d)
+            if flag == 0:
+                p_s = self.graph.nodeMap.get(id1)
+                x_s: float = p_s[0]
+                y_s: float = p_s[1]
+                p_d = self.graph.nodeMap.get(i)
+                x_d = p_d[0]
+                y_d = p_d[1]
+
+            elif flag == 1:
+                x_s = (id1 * (id1 - 1)) / 2
+                y_s = id1
+                x_d = (i * (i - 1)) / 2
+                y_d = i
+
+            x_d: float = float(x_d) - float(x_s)
+            y_d: float = float(y_d) - float(y_s)
+            plt.arrow(float(x_s), float(y_s), float(x_d), float(y_d),
+                      width=0.000005, head_width=0.0002, length_includes_head=True)
