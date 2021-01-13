@@ -125,55 +125,53 @@ class GraphAlgo(GraphAlgoInterface, ABC):
         for i in self.graph.get_all_v():  # resets all the tags to 0
             self.tags[i] = val
 
+    def dfs(self, key: int):
+        stackIN = [key]
+        stackOUT = [key]
+        resIN = [key]
+        resOUT = [key]
+        res = []
+
+        visitedIN = {key: True}
+        visitedOUT = {key: True}
+        while len(stackOUT) != 0:
+            temp = stackOUT.pop()
+            for i in self.graph.all_out_edges_of_node(temp):
+                # print(type(i))
+                # print(i)
+                # print(visitedOUT.get(i))
+                if visitedOUT.get(i) is not True:
+                    stackOUT.append(i)
+                    visitedOUT[i] = True
+                    resOUT.append(i)
+
+        while len(stackIN) != 0:
+            temp = stackIN.pop()
+            for i in self.graph.all_in_edges_of_node(temp):
+                if visitedIN.get(i) is not True:
+                    stackIN.append(i)
+                    visitedIN[i] = True
+                    resIN.append(i)
+
+        for i in resIN:
+            for j in resOUT:
+                if i == j:
+                    res.append(i)
+        self.compList.append(res)
+        return res
+
     def connected_component(self, id1: int) -> list:
-        if id1 in self.graph.get_all_v():
-            mc = self.graph.get_mc()
-            if self.chkMC == 0 or self.chkMC != mc:
-                self.connected_components()
-            for i in self.compList:
-                # print("type of i is: " + str(type(i)))
-                for j in i:
-                    if id1 == j:
-                        return i
-        return []
-
-    def connected_rek_out(self, id1: int):
-        self.countVisit += 1
-        for i in self.graph.all_out_edges_of_node(id1):
-            if self.tags.get(i) == -1:
-                self.tags[i] = 0
-                self.connected_rek_out(i)
-        self.stack.append(id1)
-        self.tags[id1] = self.countVisit
-        self.countVisit += 1
-
-    def connected_rek_in(self, id1: int, l: list()):
-        l.append(id1)
-        self.tags[id1] = 0
-        for i in self.graph.all_in_edges_of_node(id1):
-            if self.tags.get(i) == -1:
-                self.connected_rek_in(i, l)
-        return l
+        for i in self.compList:
+            for j in i:
+                if id1 == j:
+                    # print(i)
+                    return i
+        return self.dfs(id1)
 
     def connected_components(self) -> List[list]:
-        endList = []
-        self.chkMC = self.graph.get_mc()
-        self.setTag(-1)
         for i in self.graph.get_all_v():
-            if self.tags.get(i) == -1:
-                self.connected_rek_out(i)
-
-        self.countVisit = 0
-        self.setTag(-1)
-        # print(self.stack)
-        while len(self.stack) != 0:
-            temp = self.stack.pop(len(self.stack) - 1)
-            if self.tags.get(temp) == -1:
-                l = []
-                self.connected_rek_in(temp, l)
-                endList.append(l)
-        self.compList = endList
-        return endList
+            self.connected_component(i)
+        return self.compList
 
     def plot_graph(self) -> None:
         z = self.graph.v_size() * self.graph.v_size()
