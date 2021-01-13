@@ -2,7 +2,6 @@ from DiGraph import DiGraph
 # from GraphAlgo import GraphAlgo
 import json
 import time
-import networkX
 
 from src.GraphAlgo import GraphAlgo
 

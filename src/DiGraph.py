@@ -61,13 +61,20 @@ class DiGraph(GraphInterface):
         return False
 
     def remove_node(self, node_id: int) -> bool:
+        flag = True
         if node_id in self.nodeMap:
             # this removes node_id from its neighbors
             for i in self.edgeMap[node_id]:
                 del self.edgeMapRev[i][node_id]
+                self.countE -= 1
+                flag = False
+                # self.remove_edge(node_id, i)
             # this removes node_id's neighbors from it
             for i in self.edgeMapRev[node_id]:
                 del self.edgeMap[i][node_id]
+                if flag:
+                    self.countE -= 1
+            # self.countE = len(self.edgeMap)
             del self.edgeMap[node_id]
             del self.edgeMapRev[node_id]
             del self.nodeMap[node_id]
