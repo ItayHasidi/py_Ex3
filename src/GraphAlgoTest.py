@@ -1,5 +1,4 @@
 import unittest
-
 from src.DiGraph import DiGraph
 from src.GraphAlgo import GraphAlgo
 
@@ -24,7 +23,6 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(mc1, mc2)
         self.assertEqual(e1, e2)
         self.assertEqual(v1, v2)
-
 
     def test_save_load_from_json(self):
         g = GraphAlgo()

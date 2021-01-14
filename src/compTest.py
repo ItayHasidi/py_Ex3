@@ -2,14 +2,16 @@ from DiGraph import DiGraph
 # from GraphAlgo import GraphAlgo
 import json
 import time
+# import networkx as nx
 
 from src.GraphAlgo import GraphAlgo
 
 
 def tester(s: str, g: GraphAlgo):
+    # gr = nx.Graph()
     print(s)
     ms1 = time.time()
-    g.shortest_path(0,9)
+    g.shortest_path(0, 9)
     ms2 = time.time()
     print(ms2-ms1)
 
