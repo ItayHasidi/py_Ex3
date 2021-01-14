@@ -60,7 +60,7 @@ def check1():
     :return:
     """
     g_algo = GraphAlgo()  # init an empty graph - for the GraphAlgo
-    file = "../data/Graphs_random_pos/G_20000_160000_2.json_saved"
+    file = "../data/Graphs_random_pos/G_20000_160000_2.json"
 
     g_algo.load_from_json(file)  # init a GraphAlgo from a json file
     print(g_algo.get_graph().all_out_edges_of_node(15242))
